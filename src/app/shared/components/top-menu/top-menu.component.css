@@ -20,10 +20,10 @@
   text-decoration: none;
 }
 
-.brand__icon {
+.brand__logo {
   width: 2.35rem;
   height: 2.35rem;
-  color: #ff2d42;
+  object-fit: contain;
 }
 
 .brand__text {

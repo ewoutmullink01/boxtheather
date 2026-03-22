@@ -21,9 +21,8 @@
 }
 
 .brand__logo {
-  width: 2.35rem;
-  height: 2.35rem;
-  object-fit: contain;
+  width: 50%;
+  height: 50%;
 }
 
 .brand__text {

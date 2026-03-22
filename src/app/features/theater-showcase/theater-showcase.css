@@ -1,0 +1,330 @@
+:host {
+  display: block;
+  color: #f7efe6;
+  background:
+    radial-gradient(circle at top right, rgb(255 92 61 / 0.14), transparent 18rem),
+    linear-gradient(180deg, #06080d 0%, #090b11 100%);
+}
+
+.showcase {
+  min-height: 100%;
+  padding: 2rem;
+}
+
+.showcase__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: 2rem;
+  align-items: start;
+  max-width: 84rem;
+  margin-inline: auto;
+}
+
+.showcase__content {
+  min-width: 0;
+}
+
+.meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  margin: 0 0 2rem;
+  list-style: none;
+}
+
+.meta-list__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d0b8a8;
+}
+
+.meta-list__dot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: #ff6a4d;
+  box-shadow: 0 0 0.75rem rgb(255 106 77 / 0.6);
+}
+
+.meta-list__label {
+  color: #a68f80;
+}
+
+.meta-list__value {
+  color: #f3dfcf;
+}
+
+.hero-copy {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.hero-copy__title {
+  margin: 0 0 1rem;
+  color: #fff7ef;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-style: italic;
+  line-height: 1.05;
+}
+
+.hero-copy__description {
+  margin: 0;
+  color: #e8c8b6;
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 38rem;
+}
+
+.poster-card {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: #10151d;
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.35);
+}
+
+.poster-card__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.poster-card__play-button {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 0;
+  border-radius: 0.75rem;
+  transform: translate(-50%, -50%);
+  background: rgb(54 56 63 / 0.85);
+  color: #ffab97;
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.poster-card__play-button:hover {
+  background: rgb(76 80 90 / 0.92);
+  transform: translate(-50%, -50%) scale(1.03);
+}
+
+.poster-card__trailer-link {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  border: 0;
+  background: transparent;
+  color: #ece1b8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.ticket-panel {
+  padding: 1.5rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(180deg, rgb(20 22 28 / 0.96), rgb(11 13 18 / 0.98));
+  box-shadow:
+    0 0 0 1px rgb(255 106 77 / 0.06),
+    0 1.5rem 3rem rgb(0 0 0 / 0.42);
+}
+
+.ticket-panel__caption,
+.ticket-panel__section-title,
+.ticket-panel__purchase-info {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket-panel__caption {
+  margin: 0 0 0.5rem;
+  color: #8f7b6f;
+  font-size: 0.68rem;
+}
+
+.ticket-panel__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.ticket-panel__price {
+  color: #ffbf3f;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ticket-panel__price-note {
+  color: #7b6e67;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.ticket-panel__section {
+  margin-bottom: 1.5rem;
+}
+
+.ticket-panel__section-title {
+  margin: 0 0 0.85rem;
+  color: #9c887d;
+  font-size: 0.68rem;
+}
+
+.schedule-list {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.9rem 0;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.schedule-item--active {
+  border-bottom-color: rgb(255 106 77 / 0.55);
+}
+
+.schedule-item__time {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #f3ece6;
+}
+
+.schedule-item__status {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.schedule-item__status--limited {
+  color: #ff7f61;
+}
+
+.schedule-item__status--available {
+  color: #87928f;
+}
+
+.schedule-item__status--sold-out {
+  color: #7a6c66;
+}
+
+.select-field {
+  position: relative;
+}
+
+.select-field__control {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: #090d14;
+  color: #fff7ef;
+  font: inherit;
+  appearance: none;
+}
+
+.ticket-panel__reserve-button {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 0;
+  background: linear-gradient(90deg, #ff6a4d, #ff7e57);
+  color: #fff8f0;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.ticket-panel__reserve-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.ticket-panel__purchase-info {
+  margin: 1rem 0 0;
+  color: #786c66;
+  font-size: 0.62rem;
+  text-align: center;
+}
+
+.reviews {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.review-card {
+  padding: 1.5rem 1.25rem;
+  border-left: 2px solid #c7952d;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent);
+}
+
+.review-card__quote {
+  margin: 0 0 1rem;
+  color: #fff7ef;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.review-card__source {
+  margin: 0;
+  color: #ff8d73;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (width <= 960px) {
+  .showcase__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-panel {
+    max-width: 28rem;
+  }
+}
+
+@media (width <= 720px) {
+  .showcase {
+    padding: 1rem;
+  }
+
+  .reviews {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

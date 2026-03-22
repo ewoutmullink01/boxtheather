@@ -1,0 +1,91 @@
+<aside class="ticket-card" aria-label="Ticket selectie">
+  <p class="ticket-card__eyebrow">Tickets vanaf</p>
+
+  <div class="ticket-card__price-row">
+    <span class="ticket-card__price">{{ startingPriceLabel() }}</span>
+    <span class="ticket-card__tax">incl. BTW</span>
+  </div>
+
+  <section class="ticket-card__section" aria-labelledby="ticket-date-heading">
+    <h2 id="ticket-date-heading" class="ticket-card__section-title">
+      Selecteer datum
+    </h2>
+
+    <div class="slot-list">
+      @for (showTime of showTimes(); track showTime.id) {
+        <button
+          type="button"
+          class="slot-row"
+          [class.slot-row--active]="selectedShowTimeId() === showTime.id"
+          (click)="selectShowTime(showTime.id)"
+        >
+          <span class="slot-row__label">
+            {{ showTime.dayLabel }} — {{ showTime.timeLabel }}
+          </span>
+
+          <span
+            class="slot-row__status"
+            [class.slot-row__status--limited]="showTime.availability === 'limited'"
+            [class.slot-row__status--available]="showTime.availability === 'available'"
+            [class.slot-row__status--sold-out]="showTime.availability === 'sold-out'"
+          >
+            {{ availabilityLabel(showTime.availability) }}
+          </span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="ticket-card__section" aria-labelledby="ticket-quantity-heading">
+    <label
+      id="ticket-quantity-heading"
+      class="ticket-card__section-title"
+      for="ticket-quantity"
+    >
+      Hoeveelheid
+    </label>
+
+    <div class="tier-select">
+      <input
+        id="ticket-quantity"
+        class="tier-select__control"
+        type="number"
+        min="1"
+        step="1"
+        inputmode="numeric"
+        [value]="quantity()"
+        (input)="onQuantityInput($event)"
+      />
+
+
+      <span class="tier-select__chevron" aria-hidden="true">
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path
+            d="M4.25 6.5 8 10.25 11.75 6.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+          />
+        </svg>
+      </span>
+    </div>
+  </section>
+
+  <button
+    type="button"
+    class="ticket-card__cta"
+    (click)="reserve()"
+  >
+    {{ reserveLabel() }}
+  </button>
+
+  @if (purchaseInfoItems().length > 0) {
+    <footer class="ticket-card__footer" aria-label="Aankoopinformatie">
+      @for (item of purchaseInfoItems(); track item) {
+        <span class="ticket-card__footer-item">{{ item }}</span>
+      }
+    </footer>
+  }
+</aside>

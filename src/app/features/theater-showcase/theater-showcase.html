@@ -1,0 +1,55 @@
+<section class="showcase">
+  <div class="showcase__layout">
+    <div class="showcase__content">
+      <ul class="meta-list" aria-label="Voorstelling details">
+        @for (item of showcase().metaItems; track item.label) {
+          <li class="meta-list__item">
+            <span class="meta-list__dot" aria-hidden="true"></span>
+            <span class="meta-list__label">{{ item.label }}:</span>
+            <span class="meta-list__value">{{ item.value }}</span>
+          </li>
+        }
+      </ul>
+
+      <header class="hero-copy">
+        <h1 class="hero-copy__title">{{ showcase().title }}</h1>
+        <p class="hero-copy__description">
+          {{ showcase().description }}
+        </p>
+        <p> </p>
+        <p class="hero-copy__description">
+          {{ showcase().description2 }}
+        </p>
+        <p> </p>
+        <p class="hero-copy__description">
+          {{ showcase().description3 }}
+        </p>
+      </header>
+
+      <section class="reviews" aria-label="Persquotes">
+        @for (review of showcase().reviews; track review.id) {
+          <article class="review-card">
+            <blockquote class="review-card__quote">
+              “{{ review.quote }}”
+            </blockquote>
+            <p class="review-card__source">{{ review.source }}</p>
+          </article>
+        }
+      </section>
+    </div>
+
+    <app-ticket-purchase-panel
+      class="showcase__ticket-panel"
+      [startingPriceLabel]="showcase().startingPriceLabel"
+      [showTimes]="showcase().showTimes"
+      [priceTiers]="showcase().priceTiers"
+      [reserveLabel]="showcase().reserveLabel"
+      [purchaseInfoLabel]="showcase().purchaseInfoLabel"
+      [selectedShowTimeId]="activeShowTime()?.id ?? null"
+      [selectedPriceTierId]="activePriceTier()?.id ?? null"
+      (showTimeSelected)="selectShowTime($event)"
+      (priceTierSelected)="selectPriceTier($event)"
+      (reserveClicked)="onReserveClick()"
+    />
+  </div>
+</section>

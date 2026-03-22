@@ -9,7 +9,22 @@
   gap: 2rem;
   min-height: 4.25rem;
   padding: 0 1.5rem;
-  background-color: #041430;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgb(20 12 12 / 0.94) 0%,
+      rgb(10 10 12 / 0.88) 38%,
+      rgb(5 5 6 / 0.82) 72%,
+      rgb(0 0 0 / 0.76) 100%
+    );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  box-shadow:
+    0 12px 32px rgb(0 0 0 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.035);
 }
 
 .brand {

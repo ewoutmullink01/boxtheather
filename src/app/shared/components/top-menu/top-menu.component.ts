@@ -10,7 +10,7 @@ interface NavigationItem {
 const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   { label: 'Home', path: '/home', exact: true },
   { label: 'Agenda', path: '/agenda' },
-  { label: 'Kaartverkop', path: '/kaartverkoop' },
+  { label: 'Kaartverkoop', path: '/kaartverkoop' },
   { label: 'Over Ons', path: '/over-ons' },
   { label: 'Contact', path: '/contact' }
 ] as const;

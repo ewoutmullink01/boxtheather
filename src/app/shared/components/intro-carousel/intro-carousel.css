@@ -1,0 +1,113 @@
+:host {
+  display: block;
+}
+
+.carousel {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.carousel__viewport {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.carousel__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1200ms ease-in-out;
+}
+
+.carousel__slide--active,
+.carousel__slide--leaving {
+  opacity: 1;
+}
+
+.carousel__slide--active {
+  z-index: 2;
+}
+
+.carousel__slide--leaving {
+  z-index: 1;
+  opacity: 0;
+}
+
+.carousel__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transform: scale(1);
+}
+
+.carousel__slide--active .carousel__image {
+  animation: carousel-zoom 6000ms linear forwards;
+}
+
+.carousel__slide--leaving .carousel__image {
+  transform: scale(1.06);
+}
+
+.carousel__dots {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-end: 2rem;
+  z-index: 3;
+  display: flex;
+  gap: 0.75rem;
+  transform: translateX(-50%);
+}
+
+.carousel__dot {
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  border: none;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.45);
+  cursor: pointer;
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease;
+}
+
+.carousel__dot:hover {
+  transform: scale(1.1);
+}
+
+.carousel__dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.carousel__dot--active {
+  background: rgb(255 255 255 / 0.95);
+}
+
+@keyframes carousel-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__slide {
+    transition: none;
+  }
+
+  .carousel__slide--active .carousel__image {
+    animation: none;
+  }
+
+  .carousel__dot {
+    transition: none;
+  }
+}

@@ -1,0 +1,33 @@
+<section class="carousel" aria-label="Introductie carousel">
+  <div class="carousel__viewport">
+    @for (slide of slides; track slide.id; let index = $index) {
+      <div
+        class="carousel__slide"
+        [class.carousel__slide--active]="isActive(index)"
+        [class.carousel__slide--leaving]="isLeaving(index)"
+        [attr.aria-hidden]="!isActive(index)"
+      >
+        <img
+          class="carousel__image"
+          [src]="slide.imageUrl"
+          [alt]="slide.alt"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    }
+  </div>
+
+  <div class="carousel__dots" aria-label="Carousel navigatie">
+    @for (slide of slides; track slide.id; let index = $index) {
+      <button
+        class="carousel__dot"
+        [class.carousel__dot--active]="isActive(index)"
+        type="button"
+        [attr.aria-label]="'Ga naar slide ' + (index + 1)"
+        [attr.aria-pressed]="isActive(index)"
+        (click)="goToSlide(index)"
+      ></button>
+    }
+  </div>
+</section>

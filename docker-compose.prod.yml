@@ -2,7 +2,7 @@ services:
  frontend:
     build:
       context: .
-    container_name: quizzapp-frontend
+    container_name: boxtheather-frontend
     restart: unless-stopped
     ports:
       - "80:80"

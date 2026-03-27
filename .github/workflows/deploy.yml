@@ -3,7 +3,9 @@ name: Deploy to Server
 on:
   push:
     branches:
+      - main
       - master
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -20,6 +22,7 @@ jobs:
             set -e
 
             APP_DIR=/root/boxtheather
+            DEPLOY_DIR="$APP_DIR/boxtheatherFrontend"
             REPO_SSH=git@github.com-boxtheather:ewoutmullink01/boxtheather.git
 
             mkdir -p /root/.ssh
@@ -34,8 +37,14 @@ jobs:
 
             cd "$APP_DIR"
             git remote set-url origin "$REPO_SSH"
-            git fetch origin master
-            git reset --hard origin/master
+            git fetch origin main master
+            if git rev-parse --verify origin/main >/dev/null 2>&1; then
+              git reset --hard origin/main
+            else
+              git reset --hard origin/master
+            fi
+
+            cd "$DEPLOY_DIR"
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up --build -d
             docker image prune -f

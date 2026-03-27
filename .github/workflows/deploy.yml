@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -20,6 +21,7 @@ jobs:
             set -e
 
             APP_DIR=/root/boxtheather
+            DEPLOY_DIR="$APP_DIR/boxtheatherFrontend"
             REPO_SSH=git@github.com-boxtheather:ewoutmullink01/boxtheather.git
 
             mkdir -p /root/.ssh
@@ -36,6 +38,20 @@ jobs:
             git remote set-url origin "$REPO_SSH"
             git fetch origin master
             git reset --hard origin/master
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up --build -d
+
+            cd "$DEPLOY_DIR"
+            docker compose -f docker-compose.prod.yml down --remove-orphans || true
+            docker rm -f boxtheather-gateway boxtheather-frontend beheerportaal-frontend boxtheather-backend 2>/dev/null || true
+            attempt=1
+            max_attempts=3
+            until docker compose -f docker-compose.prod.yml up --build -d; do
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                echo "docker compose up failed after ${max_attempts} attempts"
+                exit 1
+              fi
+              echo "docker compose up failed (attempt ${attempt}/${max_attempts}), retrying in 20s..."
+              attempt=$((attempt + 1))
+              sleep 20
+            done
+
             docker image prune -f

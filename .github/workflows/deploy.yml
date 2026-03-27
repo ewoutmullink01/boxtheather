@@ -40,6 +40,7 @@ jobs:
             git reset --hard origin/master
 
             cd "$DEPLOY_DIR"
-            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml down --remove-orphans || true
+            docker rm -f boxtheather-gateway boxtheather-frontend beheerportaal-frontend boxtheather-backend 2>/dev/null || true
             docker compose -f docker-compose.prod.yml up --build -d
             docker image prune -f

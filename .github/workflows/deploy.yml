@@ -42,5 +42,16 @@ jobs:
             cd "$DEPLOY_DIR"
             docker compose -f docker-compose.prod.yml down --remove-orphans || true
             docker rm -f boxtheather-gateway boxtheather-frontend beheerportaal-frontend boxtheather-backend 2>/dev/null || true
-            docker compose -f docker-compose.prod.yml up --build -d
+            attempt=1
+            max_attempts=3
+            until docker compose -f docker-compose.prod.yml up --build -d; do
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                echo "docker compose up failed after ${max_attempts} attempts"
+                exit 1
+              fi
+              echo "docker compose up failed (attempt ${attempt}/${max_attempts}), retrying in 20s..."
+              attempt=$((attempt + 1))
+              sleep 20
+            done
+
             docker image prune -f

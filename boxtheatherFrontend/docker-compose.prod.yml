@@ -1,8 +1,37 @@
 services:
- frontend:
+  gateway:
+    image: nginx:1.27-alpine
+    container_name: boxtheather-gateway
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - beheerportaal
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-gateway.conf:/etc/nginx/conf.d/default.conf:ro
+
+  frontend:
     build:
       context: .
     container_name: boxtheather-frontend
     restart: unless-stopped
-    ports:
-      - "80:80"
+    expose:
+      - "80"
+
+  beheerportaal:
+    build:
+      context: ../beheerportaal
+    container_name: beheerportaal-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  backend:
+    build:
+      context: ../backend
+    container_name: boxtheather-backend
+    restart: unless-stopped
+    expose:
+      - "8080"

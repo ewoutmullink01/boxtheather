@@ -6,7 +6,7 @@
       <app-empty-state (create)="openCreateModal()" />
     } @else {
       <section class="plays-list">
-        <h2>Alle toneelstukken ({{ playCount() }})</h2>
+        <h2>Alle toneelstukken. ({{ playCount() }})</h2>
         <div class="cards-grid">
           @for (play of plays(); track play.id) {
             <app-play-card [play]="play" (edit)="openEditModal($event)" (delete)="deletePlay($event)" />

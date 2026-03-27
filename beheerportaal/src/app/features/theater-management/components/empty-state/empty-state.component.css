@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.empty-state {
+  min-height: calc(100dvh - 10rem);
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 8rem;
+  height: 8rem;
+  background: #ffffff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  font-size: 2.2rem;
+  color: #8a95a8;
+  box-shadow: 0 4px 12px rgb(16 24 40 / 8%);
+}
+
+h2 {
+  margin: 0;
+  font-size: 2.3rem;
+}
+
+p {
+  margin: 0;
+  color: #4d607b;
+  font-size: 1.7rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 0.75rem;
+  padding: 0.8rem 1.25rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.45rem;
+}
+
+.btn-primary {
+  background: linear-gradient(115deg, #6f00ff, #b100ff);
+  color: #fff;
+  box-shadow: 0 6px 14px rgb(111 0 255 / 30%);
+}
+
+.btn-large {
+  min-width: 25rem;
+}
+
+@media (max-width: 900px) {
+  p,
+  .btn {
+    font-size: 1.35rem;
+  }
+
+  .btn-large {
+    min-width: 0;
+    width: 100%;
+  }
+}

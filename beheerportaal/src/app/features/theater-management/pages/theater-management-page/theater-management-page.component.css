@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  color: #0f2442;
+}
+
+.portal-shell {
+  min-height: 100dvh;
+  background: #f3f5f9;
+}
+
+.portal-content {
+  padding: 2rem;
+}
+
+.plays-list h2 {
+  margin: 0 0 1.25rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  gap: 1.5rem;
+}

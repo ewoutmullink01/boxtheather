@@ -1,0 +1,29 @@
+<div class="portal-shell">
+  <app-portal-header (create)="openCreateModal()" />
+
+  <main class="portal-content">
+    @if (!playCount()) {
+      <app-empty-state (create)="openCreateModal()" />
+    } @else {
+      <section class="plays-list">
+        <h2>Alle toneelstukken ({{ playCount() }})</h2>
+        <div class="cards-grid">
+          @for (play of plays(); track play.id) {
+            <app-play-card [play]="play" (edit)="openEditModal($event)" (delete)="deletePlay($event)" />
+          }
+        </div>
+      </section>
+    }
+  </main>
+</div>
+
+@if (isModalOpen()) {
+  <app-play-form-modal
+    [playForm]="playForm"
+    [isEditing]="!!editingPlayId()"
+    (close)="closeModal()"
+    (save)="savePlay()"
+    (addPerformance)="addPerformance()"
+    (removePerformance)="removePerformance($event)"
+  />
+}

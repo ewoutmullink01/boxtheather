@@ -1,0 +1,31 @@
+<article class="play-card">
+  <div class="play-card__header">
+    <h3>{{ play().title }}</h3>
+    <div class="actions">
+      <button type="button" class="icon-action" title="Bewerk" (click)="onEdit()">✎</button>
+      <button type="button" class="icon-action danger" title="Verwijder" (click)="onDelete()">🗑</button>
+    </div>
+  </div>
+
+  <p class="description">{{ play().description }}</p>
+  <p class="meta">📍 {{ play().location }}</p>
+  <p class="meta">🕐 {{ play().duration }}</p>
+  <p class="meta">💶 {{ formatPrice(play().priceEur) }}</p>
+
+  <div class="performances-head">
+    <h4>Voorstellingen ({{ play().performances.length }})</h4>
+    <span>{{ ticketsForPlay() }} tickets beschikbaar</span>
+  </div>
+
+  <div class="performance-list">
+    @for (performance of play().performances; track performance.id) {
+      <div class="performance-item">
+        <div>
+          <strong>{{ performance.date | date: 'fullDate' }}</strong>
+          <p>{{ performance.time }} uur</p>
+        </div>
+        <div class="performance-tickets">{{ performance.availableTickets }} tickets</div>
+      </div>
+    }
+  </div>
+</article>

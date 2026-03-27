@@ -1,0 +1,82 @@
+<div class="modal-backdrop" (click)="onClose()"></div>
+<section class="modal" role="dialog" aria-modal="true" aria-label="Nieuw toneelstuk toevoegen">
+  <header class="modal-header">
+    <h2>{{ isEditing() ? 'Toneelstuk bewerken' : 'Nieuw toneelstuk toevoegen' }}</h2>
+    <button type="button" class="icon-action" (click)="onClose()">✕</button>
+  </header>
+
+  <form class="modal-form" [formGroup]="playForm()" (ngSubmit)="onSave()">
+    <label>
+      Titel *
+      <input type="text" formControlName="title" placeholder="Bijv. Romeo en Julia" />
+    </label>
+
+    <label>
+      Omschrijving *
+      <textarea rows="4" formControlName="description" placeholder="Beschrijf het toneelstuk..."></textarea>
+    </label>
+
+    <div class="split-grid">
+      <label>
+        Locatie *
+        <input type="text" formControlName="location" placeholder="Bijv. Stadsschouwburg Amsterdam" />
+      </label>
+
+      <label>
+        Duur *
+        <input type="text" formControlName="duration" placeholder="Bijv. 2 uur (incl. pauze)" />
+      </label>
+    </div>
+
+    <div class="split-grid">
+      <label>
+        Prijs (€) *
+        <input type="number" min="0" formControlName="priceEur" />
+      </label>
+
+      <label>
+        Afbeelding URL (optioneel)
+        <input type="url" formControlName="imageUrl" placeholder="https://..." />
+      </label>
+    </div>
+
+    <section class="performances-panel">
+      <div class="performances-panel__header">
+        <h3>Voorstellingen & Tickets</h3>
+        <button type="button" class="btn btn-secondary" (click)="onAddPerformance()">+ Voorstelling toevoegen</button>
+      </div>
+
+      @if (!performances().length) {
+        <p class="hint">Nog geen voorstellingen toegevoegd. Klik op “Voorstelling toevoegen” om te beginnen.</p>
+      } @else {
+        <div class="performance-editor-list" formArrayName="performances">
+          @for (performanceForm of performances().controls; track $index) {
+            <div class="performance-editor" [formGroupName]="$index">
+              <label>
+                Datum
+                <input type="date" formControlName="date" />
+              </label>
+
+              <label>
+                Tijd
+                <input type="time" formControlName="time" />
+              </label>
+
+              <label>
+                Beschikbare tickets
+                <input type="number" min="0" formControlName="availableTickets" />
+              </label>
+
+              <button type="button" class="icon-action danger" (click)="onRemovePerformance($index)">✕</button>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <footer class="modal-footer">
+      <button type="button" class="btn btn-tertiary" (click)="onClose()">Annuleren</button>
+      <button type="submit" class="btn btn-secondary">{{ isEditing() ? 'Opslaan' : 'Toevoegen' }}</button>
+    </footer>
+  </form>
+</section>

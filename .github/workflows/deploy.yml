@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -20,6 +21,7 @@ jobs:
             set -e
 
             APP_DIR=/root/boxtheather
+            DEPLOY_DIR="$APP_DIR/boxtheatherFrontend"
             REPO_SSH=git@github.com-boxtheather:ewoutmullink01/boxtheather.git
 
             mkdir -p /root/.ssh
@@ -36,6 +38,8 @@ jobs:
             git remote set-url origin "$REPO_SSH"
             git fetch origin master
             git reset --hard origin/master
+
+            cd "$DEPLOY_DIR"
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up --build -d
             docker image prune -f

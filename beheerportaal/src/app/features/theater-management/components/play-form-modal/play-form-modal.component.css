@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(17 24 39 / 45%);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(72rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  background: #fff;
+  border-radius: 0.8rem;
+  overflow: auto;
+  box-shadow: 0 20px 48px rgb(17 24 39 / 35%);
+}
+
+.modal-header,
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-footer {
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 0;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+h2,
+h3 {
+  margin: 0;
+}
+
+.modal-form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: #111827;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  border: 1px solid #c5cfdb;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+}
+
+.split-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.performances-panel {
+  margin-top: 0.6rem;
+  border-top: 1px solid #e7eaf0;
+  padding-top: 1rem;
+}
+
+.performances-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hint {
+  color: #53657f;
+}
+
+.performance-editor-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.performance-editor {
+  background: #f8faff;
+  border: 1px solid #dee6f3;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.icon-action {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #2563eb;
+}
+
+.icon-action.danger {
+  color: #ef4444;
+}
+
+.btn {
+  border: 0;
+  border-radius: 0.75rem;
+  padding: 0.8rem 1.25rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.45rem;
+}
+
+.btn-secondary {
+  background: #2f80ed;
+  color: #fff;
+}
+
+.btn-tertiary {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #cdd5df;
+}
+
+@media (max-width: 900px) {
+  .split-grid,
+  .performance-editor {
+    grid-template-columns: 1fr;
+  }
+}

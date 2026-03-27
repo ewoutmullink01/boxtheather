@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+.play-card {
+  background: #fff;
+  border-radius: 0.85rem;
+  box-shadow: 0 2px 8px rgb(16 24 40 / 10%);
+  padding: 1.25rem;
+}
+
+.play-card__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+h3,
+h4 {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.description {
+  color: #3a4e69;
+  margin: 0.8rem 0;
+}
+
+.meta {
+  margin: 0.4rem 0;
+  color: #4d607b;
+}
+
+.performances-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid #e6ebf2;
+}
+
+.performance-list {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.performance-item {
+  background: #f5f8ff;
+  border-radius: 0.6rem;
+  padding: 0.7rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.performance-item p {
+  margin: 0.2rem 0 0;
+}
+
+.performance-tickets {
+  color: #e65100;
+  font-weight: 700;
+}
+
+.icon-action {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #2563eb;
+}
+
+.icon-action.danger {
+  color: #ef4444;
+}

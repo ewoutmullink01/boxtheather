@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e3e5ea;
+  box-shadow: 0 1px 0 rgb(16 24 40 / 5%);
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.icon-container {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.8rem;
+  background: linear-gradient(130deg, #7518ff, #b100ff);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.7rem;
+  line-height: 1;
+}
+
+p {
+  margin: 0.2rem 0 0;
+  font-size: 1.95rem;
+  color: #3a4e69;
+}
+
+.btn {
+  border: 0;
+  border-radius: 0.75rem;
+  padding: 0.8rem 1.25rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.45rem;
+}
+
+.btn-primary {
+  background: linear-gradient(115deg, #6f00ff, #b100ff);
+  color: #fff;
+  box-shadow: 0 6px 14px rgb(111 0 255 / 30%);
+}
+
+@media (max-width: 900px) {
+  .portal-header {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  p,
+  .btn {
+    font-size: 1.35rem;
+  }
+}

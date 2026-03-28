@@ -39,6 +39,8 @@ type PlayForm = FormGroup<{
   styleUrl: './theater-management-page.component.css'
 })
 export class TheaterManagementPageComponent {
+  private static readonly LOG_PREFIX = '[TheaterManagementPage]';
+
   private readonly store = inject(TheaterPlayStoreService);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
@@ -58,6 +60,7 @@ export class TheaterManagementPageComponent {
   });
 
   openCreateModal(): void {
+    console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Open create modal`);
     this.editingPlayId.set(null);
     this.playForm.reset({
       title: '',
@@ -68,14 +71,24 @@ export class TheaterManagementPageComponent {
       imageUrl: ''
     });
     this.playForm.controls.performances.clear();
+    this.addPerformance();
     this.isModalOpen.set(true);
   }
 
   openEditModal(playId: string): void {
     const play = this.plays().find((item) => item.id === playId);
     if (!play) {
+      console.warn(
+        `${TheaterManagementPageComponent.LOG_PREFIX} Cannot open edit modal: play not found`,
+        { playId }
+      );
       return;
     }
+
+    console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Open edit modal`, {
+      playId,
+      performanceCount: play.performances.length
+    });
 
     this.editingPlayId.set(play.id);
     this.playForm.reset({
@@ -96,20 +109,27 @@ export class TheaterManagementPageComponent {
   }
 
   closeModal(): void {
+    console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Close modal`);
     this.isModalOpen.set(false);
   }
 
   addPerformance(): void {
+    console.debug(`${TheaterManagementPageComponent.LOG_PREFIX} Add performance form row`);
     this.playForm.controls.performances.push(this.createPerformanceForm());
   }
 
   removePerformance(index: number): void {
+    console.debug(`${TheaterManagementPageComponent.LOG_PREFIX} Remove performance form row`, { index });
     this.playForm.controls.performances.removeAt(index);
   }
 
   savePlay(): void {
     if (this.playForm.invalid) {
       this.playForm.markAllAsTouched();
+      console.warn(
+        `${TheaterManagementPageComponent.LOG_PREFIX} Save blocked: form is invalid`,
+        this.collectValidationErrors()
+      );
       return;
     }
 
@@ -117,8 +137,13 @@ export class TheaterManagementPageComponent {
     const editingId = this.editingPlayId();
 
     if (editingId) {
+      console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Update play`, {
+        playId: editingId,
+        draft
+      });
       this.store.updatePlay(editingId, draft);
     } else {
+      console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Add play`, { draft });
       this.store.addPlay(draft);
     }
 
@@ -126,11 +151,35 @@ export class TheaterManagementPageComponent {
   }
 
   deletePlay(playId: string): void {
+    console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Delete play`, { playId });
     this.store.deletePlay(playId);
   }
 
   setPlayActive(event: { playId: string; isActive: boolean }): void {
+    console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Toggle active state`, event);
     this.store.setPlayActive(event.playId, event.isActive);
+  }
+
+  private collectValidationErrors(): Record<string, unknown> {
+    const rawValue = this.playForm.getRawValue();
+
+    return {
+      title: this.playForm.controls.title.errors,
+      description: this.playForm.controls.description.errors,
+      location: this.playForm.controls.location.errors,
+      duration: this.playForm.controls.duration.errors,
+      priceEur: this.playForm.controls.priceEur.errors,
+      imageUrl: this.playForm.controls.imageUrl.errors,
+      performances: this.playForm.controls.performances.controls.map((performanceForm, index) => ({
+        index,
+        value: rawValue.performances[index],
+        errors: {
+          date: performanceForm.controls.date.errors,
+          time: performanceForm.controls.time.errors,
+          availableTickets: performanceForm.controls.availableTickets.errors
+        }
+      }))
+    };
   }
 
   private toDraft(): TheaterPlayDraft {

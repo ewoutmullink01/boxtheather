@@ -19,4 +19,4 @@ export interface TheaterPlay {
   readonly updatedAt: string;
 }
 
-export type TheaterPlayDraft = Omit<TheaterPlay, 'id' | 'createdAt' | 'updatedAt' | 'isActive'>;
+export type TheaterPlayDraft = Omit<TheaterPlay, 'id' | 'createdAt' | 'updatedAt'>;

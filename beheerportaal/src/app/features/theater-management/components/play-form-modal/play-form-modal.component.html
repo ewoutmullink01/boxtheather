@@ -22,6 +22,17 @@
       }
     </label>
 
+    <label class="active-toggle">
+      <input type="checkbox" formControlName="isActive" />
+      <span>
+        <strong>Actief toneelstuk</strong>
+        <small>Actieve toneelstukken zijn zichtbaar voor bezoekers.</small>
+      </span>
+      <span class="status-badge" [class.status-badge--inactive]="!playForm().controls.isActive.value">
+        {{ playForm().controls.isActive.value ? 'Actief' : 'Inactief' }}
+      </span>
+    </label>
+
     <div class="split-grid">
       <label>
         Locatie *

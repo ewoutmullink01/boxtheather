@@ -15,16 +15,16 @@ export class TheaterPlayStoreService {
   addPlay(draft: TheaterPlayDraft): void {
     const nowIso = new Date().toISOString();
     this.playsState.update((state) => {
-      const hasActivePlay = state.some((play) => play.isActive);
       const play: TheaterPlay = {
         ...draft,
         id: generateUuid(),
-        isActive: !hasActivePlay,
         createdAt: nowIso,
         updatedAt: nowIso
       };
 
-      const nextState = [...state, play];
+      const nextState = [...state, play].map((item) =>
+        play.isActive ? { ...item, isActive: item.id === play.id } : item
+      );
       console.info(`${TheaterPlayStoreService.LOG_PREFIX} Added play`, {
         playId: play.id,
         totalPlays: nextState.length
@@ -45,13 +45,16 @@ export class TheaterPlayStoreService {
             }
           : play
       );
+      const normalizedState = draft.isActive
+        ? nextState.map((play) => ({ ...play, isActive: play.id === playId }))
+        : nextState;
 
       console.info(`${TheaterPlayStoreService.LOG_PREFIX} Updated play`, {
         playId,
-        found: nextState.some((play) => play.id === playId)
+        found: normalizedState.some((play) => play.id === playId)
       });
 
-      return nextState;
+      return normalizedState;
     });
   }
 

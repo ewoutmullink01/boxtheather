@@ -25,6 +25,7 @@ type PerformanceForm = FormGroup<{
 type PlayForm = FormGroup<{
   title: FormControl<string>;
   description: FormControl<string>;
+  isActive: FormControl<boolean>;
   location: FormControl<string>;
   duration: FormControl<string>;
   priceEur: FormControl<number>;
@@ -53,6 +54,7 @@ export class TheaterManagementPageComponent {
   readonly playForm: PlayForm = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required, Validators.minLength(2)]),
     description: this.formBuilder.control('', [Validators.required, Validators.minLength(2)]),
+    isActive: this.formBuilder.control(true),
     location: this.formBuilder.control('', [Validators.required]),
     duration: this.formBuilder.control('', [Validators.required]),
     priceEur: this.formBuilder.control(0, [Validators.required, Validators.min(0)]),
@@ -66,6 +68,7 @@ export class TheaterManagementPageComponent {
     this.playForm.reset({
       title: '',
       description: '',
+      isActive: true,
       location: '',
       duration: '',
       priceEur: 0,
@@ -95,6 +98,7 @@ export class TheaterManagementPageComponent {
     this.playForm.reset({
       title: play.title,
       description: play.description,
+      isActive: play.isActive,
       location: play.location,
       duration: play.duration,
       priceEur: play.priceEur,
@@ -189,6 +193,7 @@ export class TheaterManagementPageComponent {
       description: this.playForm.controls.description.errors,
       location: this.playForm.controls.location.errors,
       duration: this.playForm.controls.duration.errors,
+      isActive: this.playForm.controls.isActive.errors,
       priceEur: this.playForm.controls.priceEur.errors,
       imageUrl: this.playForm.controls.imageUrl.errors,
       performances: this.playForm.controls.performances.controls.map((performanceForm, index) => ({
@@ -209,6 +214,7 @@ export class TheaterManagementPageComponent {
     return {
       title: formValue.title.trim(),
       description: formValue.description.trim(),
+      isActive: formValue.isActive,
       location: formValue.location.trim(),
       duration: formValue.duration.trim(),
       priceEur: Number(formValue.priceEur),

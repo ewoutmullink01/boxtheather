@@ -10,6 +10,7 @@ import {
 
 import { Performance, TheaterPlay, TheaterPlayDraft } from '../../../../core/models/theater-play.model';
 import { TheaterPlayStoreService } from '../../../../core/services/theater-play-store.service';
+import { generateUuid } from '../../../../core/utils/id.util';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { PlayCardComponent } from '../../components/play-card/play-card.component';
 import { PlayFormModalComponent } from '../../components/play-form-modal/play-form-modal.component';
@@ -213,7 +214,7 @@ export class TheaterManagementPageComponent {
       priceEur: Number(formValue.priceEur),
       imageUrl: formValue.imageUrl.trim() || undefined,
       performances: formValue.performances.map((performance) => ({
-        id: crypto.randomUUID(),
+        id: generateUuid(),
         date: performance.date,
         time: performance.time,
         availableTickets: Number(performance.availableTickets)

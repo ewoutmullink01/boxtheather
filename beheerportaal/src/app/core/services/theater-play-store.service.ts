@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 
 import { TheaterPlay, TheaterPlayDraft } from '../models/theater-play.model';
+import { generateUuid } from '../utils/id.util';
 
 @Injectable({ providedIn: 'root' })
 export class TheaterPlayStoreService {
@@ -17,7 +18,7 @@ export class TheaterPlayStoreService {
       const hasActivePlay = state.some((play) => play.isActive);
       const play: TheaterPlay = {
         ...draft,
-        id: crypto.randomUUID(),
+        id: generateUuid(),
         isActive: !hasActivePlay,
         createdAt: nowIso,
         updatedAt: nowIso

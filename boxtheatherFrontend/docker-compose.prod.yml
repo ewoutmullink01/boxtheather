@@ -33,5 +33,35 @@ services:
       context: ../backend
     container_name: boxtheather-backend
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: boxtheather
+      DB_USERNAME: boxtheather
+      DB_PASSWORD: boxtheather
     expose:
       - "8080"
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: boxtheather-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: boxtheather
+      POSTGRES_USER: boxtheather
+      POSTGRES_PASSWORD: boxtheather
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boxtheather -d boxtheather"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    expose:
+      - "5432"
+
+volumes:
+  postgres_data:

@@ -2,17 +2,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  input,
+  inject,
   model,
   output,
+  signal,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import {
   PriceTier,
   ShowTime,
   TheaterShowcase,
 } from './theater-showcase.models';
 import { TicketPurchasePanelComponent } from '../../shared/components/ticket-purchase-panel/ticket-purchase-panel';
+import { TheaterShowcaseApiService } from '../../core/services/theater-showcase-api.service';
 
 const DEFAULT_SHOWCASE: TheaterShowcase = {
   title: 'Omwentelingen.',
@@ -33,40 +34,11 @@ const DEFAULT_SHOWCASE: TheaterShowcase = {
     { label: 'Intermission', value: '15m' },
     { label: 'Genre', value: 'Contemporary tragedy' },
   ],
-  showTimes: [
-    {
-      id: 'fri-12-nov-2000',
-      dayLabel: 'Vrijdag, 12 Nov',
-      timeLabel: '20:00',
-      availability: 'limited',
-    },
-    {
-      id: 'sat-13-nov-1930',
-      dayLabel: 'Zaterdag, 13 Nov',
-      timeLabel: '19:30',
-      availability: 'available',
-    },
-    {
-      id: 'sun-14-nov-1400',
-      dayLabel: 'Zondag, 14 Nov',
-      timeLabel: '14:00',
-      availability: 'available',
-    },
-  ],
+  showTimes: [],
   priceTiers: [
     {
-      id: 'first-rank',
-      label: 'Eerste Rang',
-      priceLabel: '€65,00',
-    },
-    {
-      id: 'second-rank',
-      label: 'Tweede Rang',
-      priceLabel: '€49,00',
-    },
-    {
-      id: 'balcony',
-      label: 'Balkon',
+      id: 'standard',
+      label: 'Standaard',
       priceLabel: '€35,00',
     },
   ],
@@ -77,39 +49,35 @@ const DEFAULT_SHOWCASE: TheaterShowcase = {
         'A breathtaking descent into madness. The most innovative Shakespeare production of the decade.',
       source: 'The Evening Muse',
     },
-    {
-      id: 'review-2',
-      quote:
-        'Hauntingly beautiful. Thorne uses the stage as a canvas of pure emotion and shadow.',
-      source: 'Stage Review Weekly',
-    },
   ],
 };
 
 @Component({
   selector: 'app-theater-showcase',
   standalone: true,
-  imports: [NgOptimizedImage, TicketPurchasePanelComponent],
+  imports: [TicketPurchasePanelComponent],
   templateUrl: './theater-showcase.html',
   styleUrl: './theater-showcase.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TheaterShowcaseComponent {
-  readonly showcase = input<TheaterShowcase>(DEFAULT_SHOWCASE);
+  private readonly theaterShowcaseApiService = inject(TheaterShowcaseApiService);
 
-  readonly selectedShowTimeId = model<string | null>(
-    DEFAULT_SHOWCASE.showTimes[0]?.id ?? null,
-  );
+  readonly showcase = signal<TheaterShowcase>(DEFAULT_SHOWCASE);
+  readonly loading = signal(true);
 
-  readonly selectedPriceTierId = model<string | null>(
-    DEFAULT_SHOWCASE.priceTiers[0]?.id ?? null,
-  );
+  readonly selectedShowTimeId = model<string | null>(null);
+  readonly selectedPriceTierId = model<string | null>(null);
 
   readonly trailerClicked = output<void>();
   readonly reservationSubmitted = output<{
     showTimeId: string;
     priceTierId: string;
   }>();
+
+  constructor() {
+    this.loadActiveShowcase();
+  }
 
   readonly activeShowTime = computed<ShowTime | null>(() => {
     const selectedId = this.selectedShowTimeId();
@@ -156,6 +124,55 @@ export class TheaterShowcaseComponent {
     this.reservationSubmitted.emit({
       showTimeId: showTime.id,
       priceTierId: priceTier.id,
+    });
+  }
+
+  private loadActiveShowcase(): void {
+    this.theaterShowcaseApiService.getActivePlay().subscribe({
+      next: (play) => {
+        const mapped: TheaterShowcase = {
+          title: play.title,
+          description: play.description,
+          description2: `Locatie: ${play.location}`,
+          description3: `Duur: ${play.duration}`,
+          startingPriceLabel: `€${Number(play.priceEur).toFixed(2).replace('.', ',')}`,
+          imageSrc: play.imageUrl ?? DEFAULT_SHOWCASE.imageSrc,
+          imageAlt: `Poster van ${play.title}`,
+          trailerLabel: DEFAULT_SHOWCASE.trailerLabel,
+          reserveLabel: DEFAULT_SHOWCASE.reserveLabel,
+          purchaseInfoLabel: DEFAULT_SHOWCASE.purchaseInfoLabel,
+          metaItems: [
+            { label: 'Locatie', value: play.location },
+            { label: 'Duur', value: play.duration },
+            { label: 'Status', value: play.isActive ? 'Actief' : 'Inactief' },
+          ],
+          showTimes: play.performances.map((performance) => ({
+            id: String(performance.id),
+            dayLabel: performance.date,
+            timeLabel: performance.time,
+            availability: performance.availableTickets > 0 ? 'available' : 'sold-out',
+          })),
+          priceTiers: [
+            {
+              id: 'standard',
+              label: 'Standaard',
+              priceLabel: `€${Number(play.priceEur).toFixed(2).replace('.', ',')}`,
+            },
+          ],
+          reviews: DEFAULT_SHOWCASE.reviews,
+        };
+
+        this.showcase.set(mapped);
+        this.selectedShowTimeId.set(mapped.showTimes[0]?.id ?? null);
+        this.selectedPriceTierId.set('standard');
+        this.loading.set(false);
+      },
+      error: (error: unknown) => {
+        console.error('[TheaterShowcase] Kon actieve voorstelling niet ophalen', error);
+        this.selectedShowTimeId.set(DEFAULT_SHOWCASE.showTimes[0]?.id ?? null);
+        this.selectedPriceTierId.set(DEFAULT_SHOWCASE.priceTiers[0]?.id ?? null);
+        this.loading.set(false);
+      },
     });
   }
 }

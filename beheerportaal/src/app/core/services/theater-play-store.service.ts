@@ -11,14 +11,18 @@ export class TheaterPlayStoreService {
 
   addPlay(draft: TheaterPlayDraft): void {
     const nowIso = new Date().toISOString();
-    const play: TheaterPlay = {
-      ...draft,
-      id: crypto.randomUUID(),
-      createdAt: nowIso,
-      updatedAt: nowIso
-    };
+    this.playsState.update((state) => {
+      const hasActivePlay = state.some((play) => play.isActive);
+      const play: TheaterPlay = {
+        ...draft,
+        id: crypto.randomUUID(),
+        isActive: !hasActivePlay,
+        createdAt: nowIso,
+        updatedAt: nowIso
+      };
 
-    this.playsState.update((state) => [...state, play]);
+      return [...state, play];
+    });
   }
 
   updatePlay(playId: string, draft: TheaterPlayDraft): void {
@@ -37,5 +41,25 @@ export class TheaterPlayStoreService {
 
   deletePlay(playId: string): void {
     this.playsState.update((state) => state.filter((play) => play.id !== playId));
+  }
+
+  setPlayActive(playId: string, isActive: boolean): void {
+    const nowIso = new Date().toISOString();
+
+    this.playsState.update((state) =>
+      state.map((play) =>
+        play.id === playId
+          ? {
+              ...play,
+              isActive,
+              updatedAt: nowIso
+            }
+          : {
+              ...play,
+              isActive: isActive ? false : play.isActive,
+              updatedAt: isActive && play.isActive ? nowIso : play.updatedAt
+            }
+      )
+    );
   }
 }

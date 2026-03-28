@@ -1,11 +1,25 @@
 <article class="play-card">
   <div class="play-card__header">
-    <h3>{{ play().title }}</h3>
+    <div class="play-card__title-row">
+      <h3>{{ play().title }}</h3>
+      <span class="status-badge" [class.status-badge--inactive]="!play().isActive">
+        {{ play().isActive ? 'Actief' : 'Inactief' }}
+      </span>
+    </div>
     <div class="actions">
       <button type="button" class="icon-action" title="Bewerk" (click)="onEdit()">✎</button>
       <button type="button" class="icon-action danger" title="Verwijder" (click)="onDelete()">🗑</button>
     </div>
   </div>
+
+  <label class="active-toggle">
+    <input
+      type="checkbox"
+      [checked]="play().isActive"
+      (change)="onToggleActive($any($event.target).checked)"
+    />
+    Actief toneelstuk
+  </label>
 
   <p class="description">{{ play().description }}</p>
   <p class="meta">📍 {{ play().location }}</p>

@@ -19,7 +19,13 @@ export class TheaterPlayStoreService {
       updatedAt: nowIso
     };
 
-    this.playsState.update((state) => [...state, play]);
+    this.playsState.update((state) => [
+      ...state.map((existingPlay) => ({
+        ...existingPlay,
+        isActive: false
+      })),
+      play
+    ]);
   }
 
   updatePlay(playId: string, draft: TheaterPlayDraft): void {
@@ -41,15 +47,21 @@ export class TheaterPlayStoreService {
   }
 
   setPlayActive(playId: string, isActive: boolean): void {
+    const nowIso = new Date().toISOString();
+
     this.playsState.update((state) =>
       state.map((play) =>
         play.id === playId
           ? {
               ...play,
               isActive,
-              updatedAt: new Date().toISOString()
+              updatedAt: nowIso
             }
-          : play
+          : {
+              ...play,
+              isActive: isActive ? false : play.isActive,
+              updatedAt: isActive && play.isActive ? nowIso : play.updatedAt
+            }
       )
     );
   }

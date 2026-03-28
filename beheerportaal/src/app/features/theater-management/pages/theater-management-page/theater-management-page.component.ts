@@ -10,7 +10,6 @@ import {
 
 import { Performance, TheaterPlay, TheaterPlayDraft } from '../../../../core/models/theater-play.model';
 import { TheaterPlayStoreService } from '../../../../core/services/theater-play-store.service';
-import { generateUuid } from '../../../../core/utils/id.util';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { PlayCardComponent } from '../../components/play-card/play-card.component';
 import { PlayFormModalComponent } from '../../components/play-form-modal/play-form-modal.component';
@@ -47,7 +46,7 @@ export class TheaterManagementPageComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly isModalOpen = signal(false);
-  readonly editingPlayId = signal<string | null>(null);
+  readonly editingPlayId = signal<number | null>(null);
   readonly plays = this.store.plays;
   readonly playCount = computed(() => this.plays().length);
 
@@ -61,6 +60,11 @@ export class TheaterManagementPageComponent {
     imageUrl: this.formBuilder.control(''),
     performances: this.formBuilder.array<PerformanceForm>([])
   });
+
+
+  constructor() {
+    this.store.loadPlays();
+  }
 
   openCreateModal(): void {
     console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Open create modal`);
@@ -79,7 +83,7 @@ export class TheaterManagementPageComponent {
     this.isModalOpen.set(true);
   }
 
-  openEditModal(playId: string): void {
+  openEditModal(playId: number): void {
     const play = this.plays().find((item) => item.id === playId);
     if (!play) {
       console.warn(
@@ -175,12 +179,12 @@ export class TheaterManagementPageComponent {
     }
   }
 
-  deletePlay(playId: string): void {
+  deletePlay(playId: number): void {
     console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Delete play`, { playId });
     this.store.deletePlay(playId);
   }
 
-  setPlayActive(event: { playId: string; isActive: boolean }): void {
+  setPlayActive(event: { playId: number; isActive: boolean }): void {
     console.info(`${TheaterManagementPageComponent.LOG_PREFIX} Toggle active state`, event);
     this.store.setPlayActive(event.playId, event.isActive);
   }
@@ -220,7 +224,6 @@ export class TheaterManagementPageComponent {
       priceEur: Number(formValue.priceEur),
       imageUrl: formValue.imageUrl.trim() || undefined,
       performances: formValue.performances.map((performance) => ({
-        id: generateUuid(),
         date: performance.date,
         time: performance.time,
         availableTickets: Number(performance.availableTickets)

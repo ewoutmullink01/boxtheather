@@ -12,9 +12,9 @@ import { TheaterPlay } from '../../../../core/models/theater-play.model';
 })
 export class PlayCardComponent {
   readonly play = input.required<TheaterPlay>();
-  readonly edit = output<string>();
-  readonly delete = output<string>();
-  readonly toggleActive = output<{ playId: string; isActive: boolean }>();
+  readonly edit = output<number>();
+  readonly delete = output<number>();
+  readonly toggleActive = output<{ playId: number; isActive: boolean }>();
 
   onEdit(): void {
     this.edit.emit(this.play().id);

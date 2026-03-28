@@ -86,6 +86,12 @@ textarea {
   color: #53657f;
 }
 
+.field-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .performance-editor-list {
   display: grid;
   gap: 0.75rem;

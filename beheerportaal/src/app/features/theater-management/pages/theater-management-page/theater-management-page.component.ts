@@ -51,7 +51,7 @@ export class TheaterManagementPageComponent {
 
   readonly playForm: PlayForm = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required, Validators.minLength(2)]),
-    description: this.formBuilder.control('', [Validators.required, Validators.minLength(8)]),
+    description: this.formBuilder.control('', [Validators.required, Validators.minLength(2)]),
     location: this.formBuilder.control('', [Validators.required]),
     duration: this.formBuilder.control('', [Validators.required]),
     priceEur: this.formBuilder.control(0, [Validators.required, Validators.min(0)]),

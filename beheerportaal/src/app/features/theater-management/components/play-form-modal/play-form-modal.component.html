@@ -9,22 +9,34 @@
     <label>
       Titel *
       <input type="text" formControlName="title" placeholder="Bijv. Romeo en Julia" />
+      @if (playForm().controls.title.touched && playForm().controls.title.invalid) {
+        <small class="field-error">Titel is verplicht (minimaal 2 tekens).</small>
+      }
     </label>
 
     <label>
       Omschrijving *
       <textarea rows="4" formControlName="description" placeholder="Beschrijf het toneelstuk..."></textarea>
+      @if (playForm().controls.description.touched && playForm().controls.description.invalid) {
+        <small class="field-error">Omschrijving is verplicht (minimaal 2 tekens).</small>
+      }
     </label>
 
     <div class="split-grid">
       <label>
         Locatie *
         <input type="text" formControlName="location" placeholder="Bijv. Stadsschouwburg Amsterdam" />
+        @if (playForm().controls.location.touched && playForm().controls.location.invalid) {
+          <small class="field-error">Locatie is verplicht.</small>
+        }
       </label>
 
       <label>
         Duur *
         <input type="text" formControlName="duration" placeholder="Bijv. 2 uur (incl. pauze)" />
+        @if (playForm().controls.duration.touched && playForm().controls.duration.invalid) {
+          <small class="field-error">Duur is verplicht.</small>
+        }
       </label>
     </div>
 
@@ -32,6 +44,9 @@
       <label>
         Prijs (€) *
         <input type="number" min="0" formControlName="priceEur" />
+        @if (playForm().controls.priceEur.touched && playForm().controls.priceEur.invalid) {
+          <small class="field-error">Prijs moet 0 of hoger zijn.</small>
+        }
       </label>
 
       <label>

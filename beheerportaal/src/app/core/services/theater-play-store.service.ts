@@ -12,6 +12,7 @@ export class TheaterPlayStoreService {
   addPlay(draft: TheaterPlayDraft): void {
     const nowIso = new Date().toISOString();
     const play: TheaterPlay = {
+      isActive: true,
       ...draft,
       id: crypto.randomUUID(),
       createdAt: nowIso,
@@ -37,5 +38,19 @@ export class TheaterPlayStoreService {
 
   deletePlay(playId: string): void {
     this.playsState.update((state) => state.filter((play) => play.id !== playId));
+  }
+
+  setPlayActive(playId: string, isActive: boolean): void {
+    this.playsState.update((state) =>
+      state.map((play) =>
+        play.id === playId
+          ? {
+              ...play,
+              isActive,
+              updatedAt: new Date().toISOString()
+            }
+          : play
+      )
+    );
   }
 }

@@ -9,6 +9,7 @@ export interface TheaterPlay {
   readonly id: string;
   readonly title: string;
   readonly description: string;
+  readonly isActive: boolean;
   readonly location: string;
   readonly duration: string;
   readonly priceEur: number;
@@ -18,4 +19,4 @@ export interface TheaterPlay {
   readonly updatedAt: string;
 }
 
-export type TheaterPlayDraft = Omit<TheaterPlay, 'id' | 'createdAt' | 'updatedAt'>;
+export type TheaterPlayDraft = Omit<TheaterPlay, 'id' | 'createdAt' | 'updatedAt' | 'isActive'>;

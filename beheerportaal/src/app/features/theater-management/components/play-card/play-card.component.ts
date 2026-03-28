@@ -14,6 +14,7 @@ export class PlayCardComponent {
   readonly play = input.required<TheaterPlay>();
   readonly edit = output<string>();
   readonly delete = output<string>();
+  readonly toggleActive = output<{ playId: string; isActive: boolean }>();
 
   onEdit(): void {
     this.edit.emit(this.play().id);
@@ -21,6 +22,10 @@ export class PlayCardComponent {
 
   onDelete(): void {
     this.delete.emit(this.play().id);
+  }
+
+  onToggleActive(isActive: boolean): void {
+    this.toggleActive.emit({ playId: this.play().id, isActive });
   }
 
   ticketsForPlay(): number {

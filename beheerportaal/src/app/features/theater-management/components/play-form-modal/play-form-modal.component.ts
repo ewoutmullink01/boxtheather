@@ -11,6 +11,7 @@ type PerformanceForm = FormGroup<{
 type PlayForm = FormGroup<{
   title: FormControl<string>;
   description: FormControl<string>;
+  isActive: FormControl<boolean>;
   location: FormControl<string>;
   duration: FormControl<string>;
   priceEur: FormControl<number>;

@@ -124,6 +124,8 @@ export class TheaterManagementPageComponent {
   }
 
   savePlay(): void {
+    this.removeEmptyPerformanceRows();
+
     if (this.playForm.invalid) {
       this.playForm.markAllAsTouched();
       console.warn(
@@ -148,6 +150,24 @@ export class TheaterManagementPageComponent {
     }
 
     this.closeModal();
+  }
+
+  private removeEmptyPerformanceRows(): void {
+    const performanceArray = this.playForm.controls.performances;
+
+    for (let index = performanceArray.length - 1; index >= 0; index -= 1) {
+      const performanceForm = performanceArray.at(index);
+      const performanceValue = performanceForm.getRawValue();
+      const isEmptyPerformance =
+        !performanceValue.date.trim() && !performanceValue.time.trim() && performanceValue.availableTickets === 0;
+
+      if (isEmptyPerformance) {
+        console.debug(`${TheaterManagementPageComponent.LOG_PREFIX} Remove empty performance row before save`, {
+          index
+        });
+        performanceArray.removeAt(index);
+      }
+    }
   }
 
   deletePlay(playId: string): void {

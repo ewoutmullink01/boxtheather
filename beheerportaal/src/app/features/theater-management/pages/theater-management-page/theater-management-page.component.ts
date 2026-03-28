@@ -129,6 +129,10 @@ export class TheaterManagementPageComponent {
     this.store.deletePlay(playId);
   }
 
+  setPlayActive(event: { playId: string; isActive: boolean }): void {
+    this.store.setPlayActive(event.playId, event.isActive);
+  }
+
   private toDraft(): TheaterPlayDraft {
     const formValue = this.playForm.getRawValue();
 

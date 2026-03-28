@@ -1,14 +1,17 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 
 import { TheaterPlay, TheaterPlayDraft } from '../models/theater-play.model';
 
 @Injectable({ providedIn: 'root' })
 export class TheaterPlayStoreService {
   private static readonly LOG_PREFIX = '[TheaterPlayStore]';
+  private static readonly API_PREFIX = '/api';
 
   private readonly playsState = signal<readonly TheaterPlay[]>([]);
   private readonly isLoadingState = signal(false);
+  private readonly fallbackApiPrefix = this.resolveFallbackApiPrefix();
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -19,7 +22,7 @@ export class TheaterPlayStoreService {
   loadPlays(): void {
     this.isLoadingState.set(true);
 
-    this.httpClient.get<TheaterPlay[]>('/api/theater-plays').subscribe({
+    this.requestPlays().subscribe({
       next: (plays) => {
         this.playsState.set(plays);
         this.isLoadingState.set(false);
@@ -106,5 +109,50 @@ export class TheaterPlayStoreService {
       ...play,
       isActive
     });
+  }
+
+  private requestPlays(useFallback = false): Observable<TheaterPlay[]> {
+    return this.httpClient.get<TheaterPlay[]>(this.buildTheaterPlaysUrl(useFallback)).pipe(
+      catchError((error: unknown) => {
+        if (!useFallback && this.canRetryViaFallback(error)) {
+          console.warn(`${TheaterPlayStoreService.LOG_PREFIX} Retrying load via direct backend endpoint`, {
+            fallbackApiPrefix: this.fallbackApiPrefix
+          });
+
+          return this.requestPlays(true);
+        }
+
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private canRetryViaFallback(error: unknown): boolean {
+    return (
+      !!this.fallbackApiPrefix &&
+      error instanceof HttpErrorResponse &&
+      (error.status === 0 || error.status === 502 || error.status === 504)
+    );
+  }
+
+  private buildTheaterPlaysUrl(useFallback = false): string {
+    if (useFallback && this.fallbackApiPrefix) {
+      return `${this.fallbackApiPrefix}/theater-plays`;
+    }
+
+    return `${TheaterPlayStoreService.API_PREFIX}/theater-plays`;
+  }
+
+  private resolveFallbackApiPrefix(): string | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const { protocol, hostname } = window.location;
+    if (!protocol || !hostname) {
+      return null;
+    }
+
+    return `${protocol}//${hostname}:8080/api`;
   }
 }

@@ -4,6 +4,8 @@ import { TheaterPlay, TheaterPlayDraft } from '../models/theater-play.model';
 
 @Injectable({ providedIn: 'root' })
 export class TheaterPlayStoreService {
+  private static readonly LOG_PREFIX = '[TheaterPlayStore]';
+
   private readonly playsState = signal<readonly TheaterPlay[]>([]);
 
   readonly plays = computed(() => this.playsState());
@@ -21,13 +23,19 @@ export class TheaterPlayStoreService {
         updatedAt: nowIso
       };
 
-      return [...state, play];
+      const nextState = [...state, play];
+      console.info(`${TheaterPlayStoreService.LOG_PREFIX} Added play`, {
+        playId: play.id,
+        totalPlays: nextState.length
+      });
+
+      return nextState;
     });
   }
 
   updatePlay(playId: string, draft: TheaterPlayDraft): void {
-    this.playsState.update((state) =>
-      state.map((play) =>
+    this.playsState.update((state) => {
+      const nextState = state.map((play) =>
         play.id === playId
           ? {
               ...play,
@@ -35,12 +43,28 @@ export class TheaterPlayStoreService {
               updatedAt: new Date().toISOString()
             }
           : play
-      )
-    );
+      );
+
+      console.info(`${TheaterPlayStoreService.LOG_PREFIX} Updated play`, {
+        playId,
+        found: nextState.some((play) => play.id === playId)
+      });
+
+      return nextState;
+    });
   }
 
   deletePlay(playId: string): void {
-    this.playsState.update((state) => state.filter((play) => play.id !== playId));
+    this.playsState.update((state) => {
+      const nextState = state.filter((play) => play.id !== playId);
+      console.info(`${TheaterPlayStoreService.LOG_PREFIX} Deleted play`, {
+        playId,
+        removed: nextState.length !== state.length,
+        totalPlays: nextState.length
+      });
+
+      return nextState;
+    });
   }
 
   setPlayActive(playId: string, isActive: boolean): void {
@@ -58,8 +82,10 @@ export class TheaterPlayStoreService {
               ...play,
               isActive: isActive ? false : play.isActive,
               updatedAt: isActive && play.isActive ? nowIso : play.updatedAt
-            }
+          }
       )
     );
+
+    console.info(`${TheaterPlayStoreService.LOG_PREFIX} Set play active state`, { playId, isActive });
   }
 }

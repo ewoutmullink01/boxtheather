@@ -11,21 +11,18 @@ export class TheaterPlayStoreService {
 
   addPlay(draft: TheaterPlayDraft): void {
     const nowIso = new Date().toISOString();
-    const play: TheaterPlay = {
-      isActive: true,
-      ...draft,
-      id: crypto.randomUUID(),
-      createdAt: nowIso,
-      updatedAt: nowIso
-    };
+    this.playsState.update((state) => {
+      const hasActivePlay = state.some((play) => play.isActive);
+      const play: TheaterPlay = {
+        ...draft,
+        id: crypto.randomUUID(),
+        isActive: !hasActivePlay,
+        createdAt: nowIso,
+        updatedAt: nowIso
+      };
 
-    this.playsState.update((state) => [
-      ...state.map((existingPlay) => ({
-        ...existingPlay,
-        isActive: false
-      })),
-      play
-    ]);
+      return [...state, play];
+    });
   }
 
   updatePlay(playId: string, draft: TheaterPlayDraft): void {
